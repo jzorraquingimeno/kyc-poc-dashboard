@@ -1,0 +1,216 @@
+.ticket-detail-main {
+  flex: 1;
+  padding: 2.5rem;
+  background: #e5e7eb;
+  overflow-y: auto;
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb {
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  color: var(--abn-amro-dark-gray);
+}
+
+.breadcrumb-link {
+  color: var(--abn-amro-secondary);
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  margin: 0 0.5rem;
+  color: var(--abn-amro-dark-gray);
+}
+
+.breadcrumb-current {
+  color: var(--abn-amro-dark-gray);
+  font-weight: 600;
+}
+
+/* Company Header */
+.company-header {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid #66C7C0;
+}
+
+.company-header h1 {
+  color: var(--abn-amro-secondary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.company-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.status-badge.active {
+  background: linear-gradient(135deg, var(--abn-amro-green) 0%, var(--abn-amro-dark-green) 100%);
+  color: white;
+}
+
+/* Company Details */
+.company-details {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+}
+
+.company-details h2 {
+  color: var(--abn-amro-secondary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #66C7C0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-item label {
+  color: var(--abn-amro-dark-gray);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item span {
+  color: var(--abn-amro-secondary);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Directors Section */
+.directors-section {
+  border-top: 1px solid var(--abn-amro-medium-gray);
+  padding-top: 2rem;
+}
+
+.directors-section h3 {
+  color: var(--abn-amro-secondary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.directors-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.directors-list li {
+  background: #f8f9fa;
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  color: var(--abn-amro-secondary);
+  font-weight: 500;
+  border-left: 3px solid #66C7C0;
+}
+
+/* Actions Section */
+.actions-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+}
+
+.actions-section h2 {
+  color: var(--abn-amro-secondary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #66C7C0;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.action-btn {
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.action-btn.primary {
+  background: #ffd200;
+  color: var(--abn-amro-secondary);
+  box-shadow: 0 4px 12px rgba(255, 210, 0, 0.3);
+}
+
+.action-btn.primary:hover {
+  background: #e6bd00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 210, 0, 0.4);
+}
+
+.action-btn.secondary {
+  background: #004c4c;
+  color: white;
+}
+
+.action-btn.secondary:hover {
+  background: #003737;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .company-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+}
