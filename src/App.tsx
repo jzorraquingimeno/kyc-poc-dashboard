@@ -16,7 +16,7 @@ function App() {
         <Route path="/ticket/:kvkNumber" element={<TicketDetail />} />
         <Route path="/investigation/:kvkNumber" element={<OpenSourceInvestigation />} />
         <Route path="/investigation-report/:kvkNumber" element={<InvestigationReport />} />
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );
