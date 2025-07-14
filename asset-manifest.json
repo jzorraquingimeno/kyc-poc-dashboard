@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/kyc-poc-dashboard/static/css/main.b0f72f96.css",
+    "main.js": "/kyc-poc-dashboard/static/js/main.1bfc3a40.js",
+    "static/js/453.9c420bf0.chunk.js": "/kyc-poc-dashboard/static/js/453.9c420bf0.chunk.js",
+    "index.html": "/kyc-poc-dashboard/index.html",
+    "main.b0f72f96.css.map": "/kyc-poc-dashboard/static/css/main.b0f72f96.css.map",
+    "main.1bfc3a40.js.map": "/kyc-poc-dashboard/static/js/main.1bfc3a40.js.map",
+    "453.9c420bf0.chunk.js.map": "/kyc-poc-dashboard/static/js/453.9c420bf0.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b0f72f96.css",
+    "static/js/main.1bfc3a40.js"
+  ]
+}
