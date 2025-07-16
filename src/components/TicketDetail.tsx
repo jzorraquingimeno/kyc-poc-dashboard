@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import LoadingPage from './LoadingPage';
 import './TicketDetail.css';
 
 interface CompanyInfo {
@@ -101,9 +100,7 @@ const TicketDetail: React.FC = () => {
     alert('Opening Document Portal...');
   };
 
-  if (loading) {
-    return <LoadingPage />;
-  }
+  // Remove the separate loading page - we'll show loading inline
 
   if (!companyInfo) {
     return <div>Company not found</div>;
@@ -143,50 +140,76 @@ const TicketDetail: React.FC = () => {
           {/* Company Information */}
           <div className="company-details">
             <h2>Company Information</h2>
-            <div className="info-grid">
-              <div className="info-item">
-                <label>Legal Company Name</label>
-                <span>{companyInfo.legalName}</span>
+            
+            {loading ? (
+              <div className="loading-content">
+                <div className="loading-message">
+                  <div className="loading-spinner"></div>
+                  <p>Loading company information...</p>
+                </div>
+                <div className="loading-agents">
+                  <div className="agent-animation">
+                    <div className="agent-icon">🤖</div>
+                    <div className="agent-text">Fetching KVK Registry...</div>
+                  </div>
+                  <div className="agent-animation">
+                    <div className="agent-icon">🔍</div>
+                    <div className="agent-text">Analyzing Company Data...</div>
+                  </div>
+                  <div className="agent-animation">
+                    <div className="agent-icon">📊</div>
+                    <div className="agent-text">Compiling Information...</div>
+                  </div>
+                </div>
               </div>
-              <div className="info-item">
-                <label>Registered Address</label>
-                <span>{companyInfo.address}</span>
-              </div>
-              <div className="info-item">
-                <label>KvK Number</label>
-                <span>{companyInfo.kvkNumber}</span>
-              </div>
-              <div className="info-item">
-                <label>Legal Form</label>
-                <span>{companyInfo.legalForm}</span>
-              </div>
-              <div className="info-item">
-                <label>Founding Date</label>
-                <span>{companyInfo.foundingDate}</span>
-              </div>
-              <div className="info-item">
-                <label>Current Status</label>
-                <span>{companyInfo.status}</span>
-              </div>
-              <div className="info-item">
-                <label>SBI Code</label>
-                <span>{companyInfo.sbiCode}</span>
-              </div>
-              <div className="info-item">
-                <label>SBI Description</label>
-                <span>{companyInfo.sbiDescription}</span>
-              </div>
-            </div>
+            ) : (
+              <>
+                <div className="info-grid">
+                  <div className="info-item">
+                    <label>Legal Company Name</label>
+                    <span>{companyInfo.legalName}</span>
+                  </div>
+                  <div className="info-item">
+                    <label>Registered Address</label>
+                    <span>{companyInfo.address}</span>
+                  </div>
+                  <div className="info-item">
+                    <label>KvK Number</label>
+                    <span>{companyInfo.kvkNumber}</span>
+                  </div>
+                  <div className="info-item">
+                    <label>Legal Form</label>
+                    <span>{companyInfo.legalForm}</span>
+                  </div>
+                  <div className="info-item">
+                    <label>Founding Date</label>
+                    <span>{companyInfo.foundingDate}</span>
+                  </div>
+                  <div className="info-item">
+                    <label>Current Status</label>
+                    <span>{companyInfo.status}</span>
+                  </div>
+                  <div className="info-item">
+                    <label>SBI Code</label>
+                    <span>{companyInfo.sbiCode}</span>
+                  </div>
+                  <div className="info-item">
+                    <label>SBI Description</label>
+                    <span>{companyInfo.sbiDescription}</span>
+                  </div>
+                </div>
 
-            {/* Directors Section */}
-            <div className="directors-section">
-              <h3>Directors/Board Members</h3>
-              <ul className="directors-list">
-                {companyInfo.directors.map((director, index) => (
-                  <li key={index}>{director}</li>
-                ))}
-              </ul>
-            </div>
+                {/* Directors Section */}
+                <div className="directors-section">
+                  <h3>Directors/Board Members</h3>
+                  <ul className="directors-list">
+                    {companyInfo.directors.map((director, index) => (
+                      <li key={index}>{director}</li>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Call to Actions */}
