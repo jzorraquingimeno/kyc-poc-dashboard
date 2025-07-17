@@ -57,10 +57,10 @@
 }
 
 .stat-card h3 {
-  color: var(--abn-amro-dark-gray);
+  color: var(--abn-amro-secondary);
   font-size: 1rem;
   margin-bottom: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -241,6 +241,11 @@
   color: #ff4444;
   font-weight: 700;
   font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+.stat-card.pending .stat-number {
+  margin-bottom: 0.3rem;
 }
 
 .stat-card.approval {
@@ -255,8 +260,8 @@
 }
 
 .approval-circle {
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background: linear-gradient(135deg, #66C7C0 0%, var(--abn-amro-green) 100%);
   display: flex;
@@ -268,8 +273,8 @@
 .approval-circle::before {
   content: '';
   position: absolute;
-  width: 45px;
-  height: 45px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: white;
 }
@@ -277,7 +282,7 @@
 .approval-percentage {
   position: relative;
   z-index: 2;
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--abn-amro-secondary);
 }
@@ -291,7 +296,7 @@
 .trend-up {
   color: var(--abn-amro-green);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
 }
 
 .stat-card.investigations {
@@ -425,16 +430,20 @@
   }
 
   .approval-circle {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
   }
 
   .approval-circle::before {
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
   }
 
   .approval-percentage {
-    font-size: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .trend-up {
+    font-size: 1.2rem;
   }
 }
