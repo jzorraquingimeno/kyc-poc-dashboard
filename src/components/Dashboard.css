@@ -32,7 +32,7 @@
 
 .stat-card {
   background: linear-gradient(135deg, var(--abn-amro-white) 0%, #fefefe 100%);
-  padding: 2.5rem;
+  padding: 1.5rem;
   border-radius: 16px;
   text-align: center;
   border: 2px solid transparent;
@@ -58,15 +58,15 @@
 
 .stat-card h3 {
   color: var(--abn-amro-dark-gray);
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .stat-number {
-  font-size: 3rem;
+  font-size: 2.2rem;
   font-weight: 800;
   background: linear-gradient(135deg, var(--abn-amro-green) 0%, var(--abn-amro-dark-green) 100%);
   -webkit-background-clip: text;
@@ -251,12 +251,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .approval-circle {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: linear-gradient(135deg, #66C7C0 0%, var(--abn-amro-green) 100%);
   display: flex;
@@ -268,8 +268,8 @@
 .approval-circle::before {
   content: '';
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   background: white;
 }
@@ -277,7 +277,7 @@
 .approval-percentage {
   position: relative;
   z-index: 2;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--abn-amro-secondary);
 }
@@ -310,10 +310,10 @@
 
 .progress-bar {
   width: 100%;
-  height: 8px;
+  height: 6px;
   background: var(--abn-amro-light-gray);
   border-radius: 4px;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   overflow: hidden;
 }
 
@@ -332,12 +332,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .kpi-score {
-  font-size: 3rem;
+  font-size: 2.2rem;
   font-weight: 800;
   background: linear-gradient(135deg, var(--abn-amro-green) 0%, var(--abn-amro-dark-green) 100%);
   -webkit-background-clip: text;
