@@ -233,10 +233,6 @@
 }
 
 /* KYC-Specific Stat Cards */
-.stat-card.pending {
-  border-left: 4px solid #ff6b35;
-}
-
 .stat-card.pending .high-priority {
   color: #ff4444;
   font-weight: 700;
@@ -246,10 +242,6 @@
 
 .stat-card.pending .stat-number {
   margin-bottom: 0.3rem;
-}
-
-.stat-card.approval {
-  border-left: 4px solid #66C7C0;
 }
 
 .approval-rate {
@@ -299,9 +291,6 @@
   font-size: 1.4rem;
 }
 
-.stat-card.investigations {
-  border-left: 4px solid var(--abn-amro-yellow);
-}
 
 .stat-subtitle {
   margin-top: 0.5rem;
@@ -329,9 +318,6 @@
   transition: width 0.8s ease;
 }
 
-.stat-card.personal-kpi {
-  border-left: 4px solid var(--abn-amro-green);
-}
 
 .kpi-display {
   display: flex;
@@ -394,21 +380,6 @@
   box-shadow: 0 8px 25px rgba(0, 76, 76, 0.15);
 }
 
-.stat-card.pending:hover {
-  box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
-}
-
-.stat-card.approval:hover {
-  box-shadow: 0 8px 25px rgba(102, 199, 192, 0.2);
-}
-
-.stat-card.investigations:hover {
-  box-shadow: 0 8px 25px rgba(255, 237, 0, 0.2);
-}
-
-.stat-card.personal-kpi:hover {
-  box-shadow: 0 8px 25px rgba(85, 165, 28, 0.2);
-}
 
 @media (max-width: 768px) {
   .ticket-item {
