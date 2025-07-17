@@ -101,10 +101,7 @@ const TicketDetail: React.FC = () => {
   };
 
   // Remove the separate loading page - we'll show loading inline
-
-  if (!companyInfo) {
-    return <div>Company not found</div>;
-  }
+  // No need to check for companyInfo here as we handle loading state inline
 
   return (
     <div className="App">
@@ -123,17 +120,19 @@ const TicketDetail: React.FC = () => {
             </span>
             <span className="breadcrumb-separator">›</span>
             <span className="breadcrumb-current">
-              {companyInfo.legalName}
+              {loading ? 'Loading...' : companyInfo?.legalName || 'Company Details'}
             </span>
           </div>
 
           {/* Company Header */}
           <div className="company-header">
-            <h1>{companyInfo.legalName}</h1>
+            <h1>{loading ? 'Loading Company...' : companyInfo?.legalName}</h1>
             <div className="company-status">
-              <span className={`status-badge ${companyInfo.status.toLowerCase()}`}>
-                {companyInfo.status}
-              </span>
+              {!loading && companyInfo && (
+                <span className={`status-badge ${companyInfo.status.toLowerCase()}`}>
+                  {companyInfo.status}
+                </span>
+              )}
             </div>
           </div>
 
@@ -167,35 +166,35 @@ const TicketDetail: React.FC = () => {
                 <div className="info-grid">
                   <div className="info-item">
                     <label>Legal Company Name</label>
-                    <span>{companyInfo.legalName}</span>
+                    <span>{companyInfo?.legalName || 'N/A'}</span>
                   </div>
                   <div className="info-item">
                     <label>Registered Address</label>
-                    <span>{companyInfo.address}</span>
+                    <span>{companyInfo?.address || 'N/A'}</span>
                   </div>
                   <div className="info-item">
                     <label>KvK Number</label>
-                    <span>{companyInfo.kvkNumber}</span>
+                    <span>{companyInfo?.kvkNumber || 'N/A'}</span>
                   </div>
                   <div className="info-item">
                     <label>Legal Form</label>
-                    <span>{companyInfo.legalForm}</span>
+                    <span>{companyInfo?.legalForm || 'N/A'}</span>
                   </div>
                   <div className="info-item">
                     <label>Founding Date</label>
-                    <span>{companyInfo.foundingDate}</span>
+                    <span>{companyInfo?.foundingDate || 'N/A'}</span>
                   </div>
                   <div className="info-item">
                     <label>Current Status</label>
-                    <span>{companyInfo.status}</span>
+                    <span>{companyInfo?.status || 'N/A'}</span>
                   </div>
                   <div className="info-item">
                     <label>SBI Code</label>
-                    <span>{companyInfo.sbiCode}</span>
+                    <span>{companyInfo?.sbiCode || 'N/A'}</span>
                   </div>
                   <div className="info-item">
                     <label>SBI Description</label>
-                    <span>{companyInfo.sbiDescription}</span>
+                    <span>{companyInfo?.sbiDescription || 'N/A'}</span>
                   </div>
                 </div>
 
@@ -203,9 +202,9 @@ const TicketDetail: React.FC = () => {
                 <div className="directors-section">
                   <h3>Directors/Board Members</h3>
                   <ul className="directors-list">
-                    {companyInfo.directors.map((director, index) => (
+                    {companyInfo?.directors?.map((director, index) => (
                       <li key={index}>{director}</li>
-                    ))}
+                    )) || <li>No directors information available</li>}
                   </ul>
                 </div>
               </>
