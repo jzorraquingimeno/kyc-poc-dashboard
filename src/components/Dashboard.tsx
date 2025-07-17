@@ -16,21 +16,49 @@ const Dashboard: React.FC = () => {
       </div>
       <div className="dashboard-content">
         <div className="stats-grid">
-          <div className="stat-card">
-            <h3>Active Customers</h3>
-            <p className="stat-number">2,847</p>
+          <div className="stat-card pending">
+            <h3>Pending Tickets</h3>
+            <p className="stat-number">23</p>
+            <div className="stat-subtitle">
+              <span className="high-priority">8 High Priority</span>
+            </div>
           </div>
-          <div className="stat-card">
-            <h3>Total Transactions</h3>
-            <p className="stat-number">15,923</p>
+          <div className="stat-card approval">
+            <h3>Monthly Approval Rate</h3>
+            <div className="approval-rate">
+              <div className="approval-circle">
+                <span className="approval-percentage">87%</span>
+              </div>
+              <div className="approval-trend">
+                <span className="trend-up">↗ +2.3%</span>
+              </div>
+            </div>
           </div>
-          <div className="stat-card">
-            <h3>Assets Under Management</h3>
-            <p className="stat-number">€2.4B</p>
+          <div className="stat-card investigations">
+            <h3>Investigations Completed</h3>
+            <p className="stat-number">156</p>
+            <div className="stat-subtitle">
+              <span className="this-month">This Month</span>
+            </div>
+            <div className="progress-bar">
+              <div className="progress-fill" style={{width: '78%'}}></div>
+            </div>
           </div>
-          <div className="stat-card">
-            <h3>Digital Banking Users</h3>
-            <p className="stat-number">12,456</p>
+          <div className="stat-card personal-kpi">
+            <h3>Personal KPI Score</h3>
+            <div className="kpi-display">
+              <div className="kpi-score">9.2</div>
+              <div className="kpi-rating">
+                <div className="stars">
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star half">★</span>
+                </div>
+                <span className="kpi-label">Excellent</span>
+              </div>
+            </div>
           </div>
         </div>
 
