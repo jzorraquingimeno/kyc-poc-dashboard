@@ -35,9 +35,8 @@
 }
 
 .sidebar-item.active {
-  background: rgb(249, 202, 0);
-  color: var(--abn-amro-secondary);
-  border-left-color: #003737;
+  background: var(--abn-amro-green);
+  color: var(--abn-amro-white);
+  border-left-color: var(--abn-amro-dark-green);
   font-weight: 700;
-  box-shadow: 0 4px 12px rgba(249, 202, 0, 0.3);
 }

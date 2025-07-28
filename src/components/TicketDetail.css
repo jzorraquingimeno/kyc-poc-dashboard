@@ -42,7 +42,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-left: 4px solid #66C7C0;
+  border-left: 4px solid var(--abn-amro-green);
 }
 
 .company-header h1 {
@@ -84,7 +84,7 @@
   font-weight: 700;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #66C7C0;
+  border-bottom: 2px solid var(--abn-amro-green);
 }
 
 .info-grid {
@@ -140,7 +140,7 @@
   border-radius: 8px;
   color: var(--abn-amro-secondary);
   font-weight: 500;
-  border-left: 3px solid #66C7C0;
+  border-left: 3px solid var(--abn-amro-green);
 }
 
 /* Loading Content */
@@ -170,7 +170,7 @@
   width: 40px;
   height: 40px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #66C7C0;
+  border-top: 4px solid var(--abn-amro-green);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -240,7 +240,7 @@
   font-weight: 700;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #66C7C0;
+  border-bottom: 2px solid var(--abn-amro-green);
 }
 
 .actions-grid {
@@ -261,24 +261,23 @@
 }
 
 .action-btn.primary {
-  background: #ffd200;
-  color: var(--abn-amro-secondary);
-  box-shadow: 0 4px 12px rgba(255, 210, 0, 0.3);
+  background: var(--abn-amro-green) !important;
+  color: white !important;
 }
 
 .action-btn.primary:hover {
-  background: #e6bd00;
+  background: var(--abn-amro-dark-green) !important;
+  color: white !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 210, 0, 0.4);
 }
 
 .action-btn.secondary {
-  background: #004c4c;
+  background: var(--abn-amro-secondary);
   color: white;
 }
 
 .action-btn.secondary:hover {
-  background: #003737;
+  background: var(--abn-amro-dark-gray);
   transform: translateY(-2px);
 }
 

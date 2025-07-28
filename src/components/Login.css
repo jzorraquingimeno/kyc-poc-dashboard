@@ -21,17 +21,26 @@
   margin-bottom: 2rem;
 }
 
-.login-logo {
-  height: 60px;
-  width: auto;
+.platform-title-login {
+  color: var(--abn-amro-secondary);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
   margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.login-logo {
+  height: 120px;
+  width: auto;
+  margin-bottom: 1rem;
 }
 
 .login-header h2 {
   color: var(--abn-amro-secondary);
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin: 0;
+  margin: 0 0 0.5rem 0;
 }
 
 .login-form {
@@ -71,7 +80,7 @@
 }
 
 .login-button {
-  background: #004c4c;
+  background: var(--abn-amro-green);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -84,7 +93,7 @@
 }
 
 .login-button:hover {
-  background: #003737;
+  background: var(--abn-amro-dark-green);
 }
 
 .login-button:active {

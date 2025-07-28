@@ -14,8 +14,9 @@ const Header: React.FC = () => {
   return (
     <header className="header">
       <div className="header-left">
+        <div className="platform-title">Agentic KYC platform</div>
         <div className="logo">
-          <img src="/ABN-AMRO_Logo_new_colors.svg.png" alt="ABN AMRO" className="logo-image" />
+          <img src="/Logo%20NorthStar%20Bank.png" alt="NorthStar Bank" className="logo-image" />
         </div>
       </div>
       <div className="header-right">

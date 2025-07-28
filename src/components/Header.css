@@ -10,6 +10,14 @@
 .header-left {
   display: flex;
   align-items: center;
+  gap: 0.25rem;
+}
+
+.platform-title {
+  color: var(--abn-amro-secondary);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
 }
 
 .logo {
@@ -21,7 +29,7 @@
 }
 
 .logo-image {
-  height: 40px;
+  height: 80px;
   width: auto;
   object-fit: contain;
 }
@@ -42,13 +50,13 @@
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   border-radius: 25px;
-  background-color: #004c4c;
+  background-color: var(--abn-amro-secondary);
   transition: all 0.3s ease;
   font-size: 0.9rem;
 }
 
 .nav-item:hover {
-  background-color: #003737;
+  background-color: var(--abn-amro-dark-gray);
   color: var(--abn-amro-white);
   transform: translateY(-1px);
 }

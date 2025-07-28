@@ -19,8 +19,8 @@ const Login: React.FC = () => {
     <div className="login-container">
       <div className="login-box">
         <div className="login-header">
-          <img src="/ABN-AMRO_Logo_new_colors.svg.png" alt="ABN AMRO" className="login-logo" />
-          <h2>Sign In</h2>
+          <img src="/Logo%20NorthStar%20Bank.png" alt="NorthStar Bank" className="login-logo" />
+          <h2>Sign In Agentic KYC Platform</h2>
         </div>
         
         <form className="login-form" onSubmit={handleSubmit}>

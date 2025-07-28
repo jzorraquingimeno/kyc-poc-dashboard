@@ -92,12 +92,12 @@ const TicketDetail: React.FC = () => {
     alert('Generating Company Report...');
   };
 
-  const handleScheduleMeeting = () => {
-    alert('Scheduling Meeting...');
-  };
-
   const handleSendDocument = () => {
     alert('Opening Document Portal...');
+  };
+
+  const handleProposeDecision = () => {
+    alert('Proposing Decision...');
   };
 
   // Remove the separate loading page - we'll show loading inline
@@ -223,21 +223,21 @@ const TicketDetail: React.FC = () => {
               </button>
               <button 
                 className="action-btn secondary"
-                onClick={handleGenerateReport}
-              >
-                Generate Company Report
-              </button>
-              <button 
-                className="action-btn secondary"
-                onClick={handleScheduleMeeting}
-              >
-                Schedule Meeting
-              </button>
-              <button 
-                className="action-btn secondary"
                 onClick={handleSendDocument}
               >
                 Send Documentation Request
+              </button>
+              <button 
+                className="action-btn secondary"
+                onClick={handleProposeDecision}
+              >
+                Propose Decision
+              </button>
+              <button 
+                className="action-btn secondary"
+                onClick={handleGenerateReport}
+              >
+                Generate Company Report
               </button>
             </div>
           </div>

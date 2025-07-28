@@ -1,12 +1,12 @@
 :root {
-  --abn-amro-yellow: #FFED00;
-  --abn-amro-green: #55A51C;
-  --abn-amro-dark-green: #3D7C14;
-  --abn-amro-dark-blue: #003B5C;
-  --abn-amro-secondary: rgb(0, 76, 76);
+  --abn-amro-yellow: #F2B823;
+  --abn-amro-green: #86BC25;
+  --abn-amro-dark-green: #6A971E;
+  --abn-amro-dark-blue: #0076A8;
+  --abn-amro-secondary: #2C3E50;
   --abn-amro-light-gray: #F5F5F5;
-  --abn-amro-medium-gray: #E5E5E5;
-  --abn-amro-dark-gray: #333333;
+  --abn-amro-medium-gray: #C5C9CD;
+  --abn-amro-dark-gray: #5B6770;
   --abn-amro-white: #FFFFFF;
 }
 
