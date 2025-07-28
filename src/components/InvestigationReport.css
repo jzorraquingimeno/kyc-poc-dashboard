@@ -43,12 +43,68 @@
   border-left: 4px solid var(--abn-amro-green);
 }
 
+.report-title-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
 .report-header h1 {
   color: var(--abn-amro-secondary);
   font-size: 2.5rem;
   font-weight: 700;
-  margin: 0 0 1rem 0;
+  margin: 0;
   letter-spacing: -1px;
+}
+
+.report-title-section .api-status-indicator {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.report-title-section .api-status-indicator.online {
+  background: var(--abn-amro-green);
+  color: white;
+}
+
+.report-title-section .api-status-indicator.offline {
+  background: var(--abn-amro-yellow);
+  color: var(--abn-amro-secondary);
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 2rem;
+  gap: 2rem;
+}
+
+.loading-content .loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid var(--abn-amro-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-content p {
+  color: var(--abn-amro-secondary);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .report-header h2 {
