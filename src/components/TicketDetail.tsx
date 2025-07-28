@@ -2,84 +2,43 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
+import { apiService, CompanyInfo } from '../services/api';
 import './TicketDetail.css';
 
-interface CompanyInfo {
-  legalName: string;
-  address: string;
-  kvkNumber: string;
-  legalForm: string;
-  foundingDate: string;
-  status: string;
-  sbiCode: string;
-  sbiDescription: string;
-  directors: string[];
-}
 
 const TicketDetail: React.FC = () => {
   const { kvkNumber } = useParams<{ kvkNumber: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
-
-  // Mock company data
-  const mockCompanyData: { [key: string]: CompanyInfo } = {
-    '12345678': {
-      legalName: 'Amsterdam Tech Solutions B.V.',
-      address: 'Herengracht 123, 1015 BG Amsterdam',
-      kvkNumber: '12345678',
-      legalForm: 'Besloten Vennootschap (B.V.)',
-      foundingDate: '15-03-2018',
-      status: 'Active',
-      sbiCode: '62010',
-      sbiDescription: 'Computer programming activities',
-      directors: ['J.M. van der Berg', 'S.A. de Vries']
-    },
-    '23456789': {
-      legalName: 'Green Garden Services',
-      address: 'Parkstraat 45, 2011 ML Haarlem',
-      kvkNumber: '23456789',
-      legalForm: 'Eenmanszaak',
-      foundingDate: '22-06-2020',
-      status: 'Active',
-      sbiCode: '81300',
-      sbiDescription: 'Landscape service activities',
-      directors: ['P.J. Janssen']
-    },
-    '34567890': {
-      legalName: 'Rotterdam Logistics Group',
-      address: 'Maasboulevard 100, 3063 NS Rotterdam',
-      kvkNumber: '34567890',
-      legalForm: 'Besloten Vennootschap (B.V.)',
-      foundingDate: '08-11-2016',
-      status: 'Active',
-      sbiCode: '52291',
-      sbiDescription: 'Forwarding agencies, ship brokers, etc.',
-      directors: ['M.R. Bakker', 'L.H. Smit', 'A.C. van Dijk']
-    }
-  };
+  const [apiStatus, setApiStatus] = useState<'online' | 'offline'>('offline');
 
   useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      if (kvkNumber && mockCompanyData[kvkNumber]) {
-        setCompanyInfo(mockCompanyData[kvkNumber]);
-      } else {
-        // Default company info for KVK numbers not in mock data
-        setCompanyInfo({
-          legalName: 'Sample Company B.V.',
-          address: 'Business Street 1, 1000 AB Amsterdam',
-          kvkNumber: kvkNumber || '00000000',
-          legalForm: 'Besloten Vennootschap (B.V.)',
-          foundingDate: '01-01-2020',
-          status: 'Active',
-          sbiCode: '70221',
-          sbiDescription: 'Business and other management consultancy activities',
-          directors: ['John Doe', 'Jane Smith']
-        });
+    const loadCompanyData = async () => {
+      if (!kvkNumber) return;
+
+      try {
+        setLoading(true);
+        
+        // Check API health
+        const health = await apiService.healthCheck();
+        setApiStatus(health.status === 'healthy' ? 'online' : 'offline');
+
+        // Load company details
+        const companyData = await apiService.getCompanyDetails(kvkNumber);
+        setCompanyInfo(companyData);
+      } catch (error) {
+        console.error('Failed to load company data:', error);
+        setApiStatus('offline');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    }, 2000);
+    };
+
+    // Add a small delay to show loading animation
+    const timer = setTimeout(() => {
+      loadCompanyData();
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, [kvkNumber]);
@@ -126,7 +85,14 @@ const TicketDetail: React.FC = () => {
 
           {/* Company Header */}
           <div className="company-header">
-            <h1>{loading ? 'Loading Company...' : companyInfo?.legalName}</h1>
+            <div className="company-title-section">
+              <h1>{loading ? 'Loading Company...' : companyInfo?.legalName}</h1>
+              {!loading && (
+                <div className={`api-status-indicator ${apiStatus}`}>
+                  {apiStatus === 'online' ? 'LIVE DATA' : 'Cached Data'}
+                </div>
+              )}
+            </div>
             <div className="company-status">
               {!loading && companyInfo && (
                 <span className={`status-badge ${companyInfo.status.toLowerCase()}`}>

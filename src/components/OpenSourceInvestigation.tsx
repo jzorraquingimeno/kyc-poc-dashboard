@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
+import { apiService, CompanyInfo } from '../services/api';
 import './OpenSourceInvestigation.css';
 
 interface Step {
@@ -10,10 +11,6 @@ interface Step {
   subActivities: string[];
 }
 
-interface CompanyInfo {
-  legalName: string;
-  kvkNumber: string;
-}
 
 const OpenSourceInvestigation: React.FC = () => {
   const { kvkNumber } = useParams<{ kvkNumber: string }>();
@@ -22,11 +19,10 @@ const OpenSourceInvestigation: React.FC = () => {
   const [currentSubActivity, setCurrentSubActivity] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
-
-  const companyInfo: CompanyInfo = {
-    legalName: 'Amsterdam Tech Solutions B.V.',
-    kvkNumber: kvkNumber || '12345678'
-  };
+  const [apiStatus, setApiStatus] = useState<'online' | 'offline'>('offline');
+  const [investigationData, setInvestigationData] = useState<any>(null);
+  const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const steps: Step[] = [
     {
@@ -79,7 +75,48 @@ const OpenSourceInvestigation: React.FC = () => {
     }
   ];
 
+  // Load company data from API
   useEffect(() => {
+    const loadCompanyData = async () => {
+      if (!kvkNumber) return;
+
+      try {
+        setLoading(true);
+        
+        // Check API health
+        const health = await apiService.healthCheck();
+        setApiStatus(health.status === 'healthy' ? 'online' : 'offline');
+
+        // Load company details
+        const companyData = await apiService.getCompanyDetails(kvkNumber);
+        setCompanyInfo(companyData);
+      } catch (error) {
+        console.error('Failed to load company data:', error);
+        setApiStatus('offline');
+        
+        // Fallback to basic company info if API fails
+        setCompanyInfo({
+          legalName: 'Unknown Company',
+          address: 'Address not available',
+          kvkNumber: kvkNumber,
+          legalForm: 'Unknown',
+          foundingDate: 'Unknown',
+          status: 'Unknown',
+          sbiCode: 'Unknown',
+          sbiDescription: 'Unknown',
+          directors: ['Unknown']
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCompanyData();
+  }, [kvkNumber]);
+
+  // Handle investigation progress
+  useEffect(() => {
+    if (!companyInfo || loading) return;
     const totalDuration = 15000; // 15 seconds
     const totalSubActivities = steps.reduce((acc, step) => acc + step.subActivities.length, 0);
     const intervalDuration = totalDuration / totalSubActivities;
@@ -106,10 +143,40 @@ const OpenSourceInvestigation: React.FC = () => {
         if (nextSubActivity >= totalSubActivities) {
           setIsComplete(true);
           clearInterval(interval);
-          // Navigate to report after a brief delay
-          setTimeout(() => {
-            navigate(`/investigation-report/${kvkNumber}`);
-          }, 1000);
+          
+          // Call API to process KYC and then navigate to report
+          const processInvestigation = async () => {
+            try {
+              // Check API health
+              const health = await apiService.healthCheck();
+              setApiStatus(health.status === 'healthy' ? 'online' : 'offline');
+
+              // Process KYC investigation
+              const companyName = companyInfo?.legalName || 'Unknown Company';
+              const investigationResult = await apiService.processKYC({
+                company_name: companyName,
+                home_url: `https://example.com/${companyName.toLowerCase().replace(/\s+/g, '-')}`,
+                about_url: `https://example.com/${companyName.toLowerCase().replace(/\s+/g, '-')}/about`
+              });
+
+              setInvestigationData(investigationResult);
+              
+              // Navigate to report after processing
+              setTimeout(() => {
+                navigate(`/investigation-report/${kvkNumber}`);
+              }, 1000);
+            } catch (error) {
+              console.error('Failed to process KYC investigation:', error);
+              setApiStatus('offline');
+              
+              // Still navigate to report even if API fails (will use mock data)
+              setTimeout(() => {
+                navigate(`/investigation-report/${kvkNumber}`);
+              }, 1000);
+            }
+          };
+
+          processInvestigation();
         }
         
         return nextSubActivity;
@@ -117,7 +184,7 @@ const OpenSourceInvestigation: React.FC = () => {
     }, intervalDuration);
 
     return () => clearInterval(interval);
-  }, [kvkNumber, navigate, steps]);
+  }, [kvkNumber, navigate, steps, companyInfo, loading]);
 
   const getSubActivityIndex = (globalIndex: number) => {
     let count = 0;
@@ -144,7 +211,7 @@ const OpenSourceInvestigation: React.FC = () => {
             </span>
             <span className="breadcrumb-separator">›</span>
             <span onClick={() => navigate(`/ticket/${kvkNumber}`)} className="breadcrumb-link">
-              {companyInfo.legalName}
+              {loading ? 'Loading...' : companyInfo?.legalName || 'Unknown Company'}
             </span>
             <span className="breadcrumb-separator">›</span>
             <span className="breadcrumb-current">
@@ -154,8 +221,19 @@ const OpenSourceInvestigation: React.FC = () => {
 
           {/* Investigation Header */}
           <div className="investigation-header">
-            <h1>Open Source Investigation</h1>
-            <p>{companyInfo.legalName} (KVK: {companyInfo.kvkNumber})</p>
+            <div className="investigation-title-section">
+              <h1>Open Source Investigation</h1>
+              {isComplete && (
+                <div className={`api-status-indicator ${apiStatus}`}>
+                  {apiStatus === 'online' ? 'LIVE DATA' : 'Offline Mode'}
+                </div>
+              )}
+            </div>
+            <p>
+              {loading ? 'Loading company information...' : 
+                `${companyInfo?.legalName || 'Unknown Company'} (KVK: ${companyInfo?.kvkNumber || kvkNumber})`
+              }
+            </p>
           </div>
 
           {/* Progress Bar */}
