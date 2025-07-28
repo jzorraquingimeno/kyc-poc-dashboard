@@ -152,15 +152,25 @@ class APIService {
       const response = await this.makeRequest<{ companies: any[]; total_count: number }>('/companies');
       
       // Transform API response to match our interface
-      const companies = response.companies.map((company: any) => ({
-        kvkNumber: company.kvk_number?.toString() || 'Unknown',
-        companyName: company.legal_entity_name || company.legal_name || 'Unknown Company',
-        date: company.founding_date || new Date().toISOString().split('T')[0],
-        category: 'KYC',
-        urgency: company.priority || company.urgency || 'Medium',
-        status: company.status || 'New',
-        actions: 'Investigation Required'
-      }));
+      const companies = response.companies.map((company: any, index: number) => {
+        // Assign priority based on position: first 2 = High, middle 6 = Medium, last 2 = Low
+        let urgency = 'Medium';
+        if (index < 2) {
+          urgency = 'High';
+        } else if (index >= response.companies.length - 2) {
+          urgency = 'Low';
+        }
+
+        return {
+          kvkNumber: company.kvk_number?.toString() || 'Unknown',
+          companyName: company.legal_entity_name || company.legal_name || 'Unknown Company',
+          date: company.founding_date || new Date().toISOString().split('T')[0],
+          category: 'KYC',
+          urgency: urgency,
+          status: company.status || 'New',
+          actions: 'Investigation Required'
+        };
+      });
 
       return companies;
     } catch (error) {
