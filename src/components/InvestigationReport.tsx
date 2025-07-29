@@ -66,11 +66,13 @@ const InvestigationReport: React.FC = () => {
   // Convert API risk assessment to findings format
   const getFindings = (): Finding[] => {
     if (!investigationData?.risk_assessment) {
+      console.log('No risk assessment data available:', investigationData);
       return []; // Return empty array if no data
     }
 
     const riskAssessment = investigationData.risk_assessment;
     const findings: Finding[] = [];
+    console.log('Risk assessment data:', riskAssessment);
 
     // Helper function to convert risk score to risk level
     const getRiskLevel = (score: number): 'Low' | 'Medium' | 'High' => {
@@ -84,7 +86,7 @@ const InvestigationReport: React.FC = () => {
       findings.push({
         category: 'Geographical Risk',
         description: riskAssessment.geo_risk.Summary || 'No geographical risk information available.',
-        risk: getRiskLevel(riskAssessment.geo_risk.Risk_Score || 0)
+        risk: getRiskLevel(riskAssessment.geo_risk['Risk Score'] || riskAssessment.geo_risk.Risk_Score || 0)
       });
     }
 
@@ -93,7 +95,7 @@ const InvestigationReport: React.FC = () => {
       findings.push({
         category: 'Industry Risk', 
         description: riskAssessment.industry_risk.Summary || 'No industry risk information available.',
-        risk: getRiskLevel(riskAssessment.industry_risk.Risk_Score || 0)
+        risk: getRiskLevel(riskAssessment.industry_risk['Risk Score'] || riskAssessment.industry_risk.Risk_Score || 0)
       });
     }
 
@@ -102,7 +104,7 @@ const InvestigationReport: React.FC = () => {
       findings.push({
         category: 'Structure Risk',
         description: riskAssessment.structure_risk.Summary || 'No structure risk information available.',
-        risk: getRiskLevel(riskAssessment.structure_risk.Risk_Score || 0)
+        risk: getRiskLevel(riskAssessment.structure_risk['Risk Score'] || riskAssessment.structure_risk.Risk_Score || 0)
       });
     }
 
@@ -111,7 +113,7 @@ const InvestigationReport: React.FC = () => {
       findings.push({
         category: 'Adverse Media',
         description: riskAssessment.adverse_media_risk.Summary || 'No adverse media information available.',
-        risk: getRiskLevel(riskAssessment.adverse_media_risk.Risk_Score || 0)
+        risk: getRiskLevel(riskAssessment.adverse_media_risk['Risk Score'] || riskAssessment.adverse_media_risk.Risk_Score || 0)
       });
     }
 
@@ -120,7 +122,7 @@ const InvestigationReport: React.FC = () => {
       findings.push({
         category: 'Sanctions Check',
         description: riskAssessment.sanctions_risk.Summary || 'No sanctions information available.',
-        risk: getRiskLevel(riskAssessment.sanctions_risk.Risk_Score || 0)
+        risk: getRiskLevel(riskAssessment.sanctions_risk['Risk Score'] || riskAssessment.sanctions_risk.Risk_Score || 0)
       });
     }
 
@@ -129,10 +131,11 @@ const InvestigationReport: React.FC = () => {
       findings.push({
         category: 'PEP Check',
         description: riskAssessment.pep_risk.Summary || 'No PEP information available.',
-        risk: getRiskLevel(riskAssessment.pep_risk.Risk_Score || 0)
+        risk: getRiskLevel(riskAssessment.pep_risk['Risk Score'] || riskAssessment.pep_risk.Risk_Score || 0)
       });
     }
 
+    console.log('Generated findings:', findings);
     return findings;
   };
 
@@ -148,22 +151,22 @@ const InvestigationReport: React.FC = () => {
     const scores: RiskScore[] = [];
 
     if (riskAssessment.geo_risk) {
-      scores.push({ category: 'Geographical Risk', score: riskAssessment.geo_risk.Risk_Score || 0, weight: 20 });
+      scores.push({ category: 'Geographical Risk', score: riskAssessment.geo_risk['Risk Score'] || riskAssessment.geo_risk.Risk_Score || 0, weight: 20 });
     }
     if (riskAssessment.industry_risk) {
-      scores.push({ category: 'Industry Risk', score: riskAssessment.industry_risk.Risk_Score || 0, weight: 15 });
+      scores.push({ category: 'Industry Risk', score: riskAssessment.industry_risk['Risk Score'] || riskAssessment.industry_risk.Risk_Score || 0, weight: 15 });
     }
     if (riskAssessment.structure_risk) {
-      scores.push({ category: 'Structure Risk', score: riskAssessment.structure_risk.Risk_Score || 0, weight: 25 });
+      scores.push({ category: 'Structure Risk', score: riskAssessment.structure_risk['Risk Score'] || riskAssessment.structure_risk.Risk_Score || 0, weight: 25 });
     }
     if (riskAssessment.adverse_media_risk) {
-      scores.push({ category: 'Adverse Media', score: riskAssessment.adverse_media_risk.Risk_Score || 0, weight: 15 });
+      scores.push({ category: 'Adverse Media', score: riskAssessment.adverse_media_risk['Risk Score'] || riskAssessment.adverse_media_risk.Risk_Score || 0, weight: 15 });
     }
     if (riskAssessment.sanctions_risk) {
-      scores.push({ category: 'Sanctions', score: riskAssessment.sanctions_risk.Risk_Score || 0, weight: 15 });
+      scores.push({ category: 'Sanctions', score: riskAssessment.sanctions_risk['Risk Score'] || riskAssessment.sanctions_risk.Risk_Score || 0, weight: 15 });
     }
     if (riskAssessment.pep_risk) {
-      scores.push({ category: 'PEP', score: riskAssessment.pep_risk.Risk_Score || 0, weight: 10 });
+      scores.push({ category: 'PEP', score: riskAssessment.pep_risk['Risk Score'] || riskAssessment.pep_risk.Risk_Score || 0, weight: 10 });
     }
 
     return scores;
@@ -321,17 +324,31 @@ const InvestigationReport: React.FC = () => {
           <div className="report-section">
             <h3>FINDINGS</h3>
             <div className="findings-grid">
-              {findings.map((finding, index) => (
-                <div key={index} className="finding-item">
-                  <div className="finding-header">
-                    <h4>{finding.category}</h4>
-                    <span className={`risk-badge ${finding.risk.toLowerCase()}`}>
-                      {finding.risk}
-                    </span>
+              {findings.length > 0 ? (
+                findings.map((finding, index) => (
+                  <div key={index} className="finding-item">
+                    <div className="finding-header">
+                      <h4>{finding.category}</h4>
+                      <span className={`risk-badge ${finding.risk.toLowerCase()}`}>
+                        {finding.risk}
+                      </span>
+                    </div>
+                    <p>{finding.description}</p>
                   </div>
-                  <p>{finding.description}</p>
+                ))
+              ) : (
+                <div className="no-findings">
+                  <p>No findings available. Check browser console for API response details.</p>
+                  {investigationData && (
+                    <details style={{ marginTop: '1rem', padding: '1rem', background: '#f5f5f5', borderRadius: '8px' }}>
+                      <summary>Debug: Raw API Response</summary>
+                      <pre style={{ fontSize: '12px', overflow: 'auto', maxHeight: '300px' }}>
+                        {JSON.stringify(investigationData, null, 2)}
+                      </pre>
+                    </details>
+                  )}
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
