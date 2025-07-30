@@ -74,66 +74,33 @@ const InvestigationReport: React.FC = () => {
     const findings: Finding[] = [];
     console.log('Risk assessment data:', riskAssessment);
 
-    // Helper function to convert risk score to risk level
+    // Helper function to convert risk score (0-10) to risk level
     const getRiskLevel = (score: number): 'Low' | 'Medium' | 'High' => {
       if (score <= 3) return 'Low';
       if (score <= 7) return 'Medium';
       return 'High';
     };
 
-    // Geographical Risk
-    if (riskAssessment.geo_risk) {
-      findings.push({
-        category: 'Geographical Risk',
-        description: riskAssessment.geo_risk.Summary || 'No geographical risk information available.',
-        risk: getRiskLevel(riskAssessment.geo_risk['Risk Score'] || riskAssessment.geo_risk.Risk_Score || 0)
-      });
-    }
+    // Process all risk categories
+    const riskCategories = [
+      { key: 'geo_risk', name: 'Geographical Risk' },
+      { key: 'industry_risk', name: 'Industry Risk' },
+      { key: 'structure_risk', name: 'Structure Risk' },
+      { key: 'adverse_media_risk', name: 'Adverse Media Risk' },
+      { key: 'sanctions_risk', name: 'Sanctions Risk' },
+      { key: 'pep_risk', name: 'PEP Risk' }
+    ];
 
-    // Industry Risk
-    if (riskAssessment.industry_risk) {
-      findings.push({
-        category: 'Industry Risk', 
-        description: riskAssessment.industry_risk.Summary || 'No industry risk information available.',
-        risk: getRiskLevel(riskAssessment.industry_risk['Risk Score'] || riskAssessment.industry_risk.Risk_Score || 0)
-      });
-    }
-
-    // Structure Risk
-    if (riskAssessment.structure_risk) {
-      findings.push({
-        category: 'Structure Risk',
-        description: riskAssessment.structure_risk.Summary || 'No structure risk information available.',
-        risk: getRiskLevel(riskAssessment.structure_risk['Risk Score'] || riskAssessment.structure_risk.Risk_Score || 0)
-      });
-    }
-
-    // Adverse Media Risk
-    if (riskAssessment.adverse_media_risk) {
-      findings.push({
-        category: 'Adverse Media',
-        description: riskAssessment.adverse_media_risk.Summary || 'No adverse media information available.',
-        risk: getRiskLevel(riskAssessment.adverse_media_risk['Risk Score'] || riskAssessment.adverse_media_risk.Risk_Score || 0)
-      });
-    }
-
-    // Sanctions Risk
-    if (riskAssessment.sanctions_risk) {
-      findings.push({
-        category: 'Sanctions Check',
-        description: riskAssessment.sanctions_risk.Summary || 'No sanctions information available.',
-        risk: getRiskLevel(riskAssessment.sanctions_risk['Risk Score'] || riskAssessment.sanctions_risk.Risk_Score || 0)
-      });
-    }
-
-    // PEP Risk
-    if (riskAssessment.pep_risk) {
-      findings.push({
-        category: 'PEP Check',
-        description: riskAssessment.pep_risk.Summary || 'No PEP information available.',
-        risk: getRiskLevel(riskAssessment.pep_risk['Risk Score'] || riskAssessment.pep_risk.Risk_Score || 0)
-      });
-    }
+    riskCategories.forEach(category => {
+      const riskData = riskAssessment[category.key];
+      if (riskData) {
+        findings.push({
+          category: riskData['Risk Category'] || category.name,
+          description: riskData.Summary || `${category.name}: ${riskData['Risk Description'] || 'No information available.'}`,
+          risk: getRiskLevel(riskData['Risk Score'] || 0)
+        });
+      }
+    });
 
     console.log('Generated findings:', findings);
     return findings;
@@ -150,49 +117,95 @@ const InvestigationReport: React.FC = () => {
     const riskAssessment = investigationData.risk_assessment;
     const scores: RiskScore[] = [];
 
-    if (riskAssessment.geo_risk) {
-      scores.push({ category: 'Geographical Risk', score: riskAssessment.geo_risk['Risk Score'] || riskAssessment.geo_risk.Risk_Score || 0, weight: 20 });
-    }
-    if (riskAssessment.industry_risk) {
-      scores.push({ category: 'Industry Risk', score: riskAssessment.industry_risk['Risk Score'] || riskAssessment.industry_risk.Risk_Score || 0, weight: 15 });
-    }
-    if (riskAssessment.structure_risk) {
-      scores.push({ category: 'Structure Risk', score: riskAssessment.structure_risk['Risk Score'] || riskAssessment.structure_risk.Risk_Score || 0, weight: 25 });
-    }
-    if (riskAssessment.adverse_media_risk) {
-      scores.push({ category: 'Adverse Media', score: riskAssessment.adverse_media_risk['Risk Score'] || riskAssessment.adverse_media_risk.Risk_Score || 0, weight: 15 });
-    }
-    if (riskAssessment.sanctions_risk) {
-      scores.push({ category: 'Sanctions', score: riskAssessment.sanctions_risk['Risk Score'] || riskAssessment.sanctions_risk.Risk_Score || 0, weight: 15 });
-    }
-    if (riskAssessment.pep_risk) {
-      scores.push({ category: 'PEP', score: riskAssessment.pep_risk['Risk Score'] || riskAssessment.pep_risk.Risk_Score || 0, weight: 10 });
-    }
+    const riskCategories = [
+      { key: 'geo_risk', name: 'Geographical Risk', weight: 20 },
+      { key: 'industry_risk', name: 'Industry Risk', weight: 15 },
+      { key: 'structure_risk', name: 'Structure Risk', weight: 25 },
+      { key: 'adverse_media_risk', name: 'Adverse Media Risk', weight: 15 },
+      { key: 'sanctions_risk', name: 'Sanctions Risk', weight: 15 },
+      { key: 'pep_risk', name: 'PEP Risk', weight: 10 }
+    ];
+
+    riskCategories.forEach(category => {
+      const riskData = riskAssessment[category.key];
+      if (riskData) {
+        scores.push({ 
+          category: riskData['Risk Category'] || category.name, 
+          score: riskData['Risk Score'] || 0, 
+          weight: category.weight 
+        });
+      }
+    });
 
     return scores;
   };
 
   const riskScores = getRiskScores();
 
-  // Calculate overall risk score
-  const calculateOverallScore = (): number => {
-    if (riskScores.length === 0) return 0;
-    
-    const weightedSum = riskScores.reduce((sum, item) => sum + (item.score * item.weight), 0);
-    const totalWeight = riskScores.reduce((sum, item) => sum + item.weight, 0);
-    
-    return totalWeight > 0 ? +(weightedSum / totalWeight).toFixed(1) : 0;
-  };
-
-  const overallScore = calculateOverallScore();
+  // Use final_risk_score from API or calculate if not available
+  const overallScore = investigationData?.risk_assessment?.final_risk_score || 0;
 
   // Generate conclusion based on overall score
   const getConclusion = (): string => {
     const riskLevel = overallScore <= 3 ? 'LOW RISK' : overallScore <= 7 ? 'MEDIUM RISK' : 'HIGH RISK';
-    return `Based on comprehensive open-source investigation, ${companyName} presents a ${riskLevel} profile. ${investigationData?.public_web_data?.company_description ? 'Company analysis shows: ' + investigationData.public_web_data.company_description.substring(0, 200) + '...' : 'No additional company description available.'}`;
+    const companyDescription = investigationData?.public_web_data?.company_description;
+    return `Based on comprehensive open-source investigation, ${companyName} presents a ${riskLevel} profile with a final risk score of ${overallScore}/10. ${companyDescription ? companyDescription.substring(0, 300) + '...' : 'No additional company description available.'}`;
   };
 
   const conclusion = loading ? 'Loading investigation results...' : getConclusion();
+
+  // Extract Evidence Locker from API sources
+  const getEvidenceLocker = () => {
+    if (!investigationData?.risk_assessment) return [];
+    
+    const evidence: Array<{category: string, sources: Array<{title: string, link: string, snippet: string}>}> = [];
+    const riskAssessment = investigationData.risk_assessment;
+
+    const riskCategories = [
+      { key: 'geo_risk', name: 'Geographical Risk' },
+      { key: 'industry_risk', name: 'Industry Risk' },
+      { key: 'structure_risk', name: 'Structure Risk' },
+      { key: 'adverse_media_risk', name: 'Adverse Media Risk' },
+      { key: 'sanctions_risk', name: 'Sanctions Risk' },
+      { key: 'pep_risk', name: 'PEP Risk' }
+    ];
+
+    riskCategories.forEach(category => {
+      const riskData = riskAssessment[category.key];
+      if (riskData?.Source) {
+        const categoryEvidence = {
+          category: riskData['Risk Category'] || category.name,
+          sources: [] as Array<{title: string, link: string, snippet: string}>
+        };
+
+        // Handle different source structures
+        if (typeof riskData.Source === 'object') {
+          Object.keys(riskData.Source).forEach(sourceType => {
+            const sourceList = riskData.Source[sourceType];
+            if (Array.isArray(sourceList)) {
+              sourceList.forEach((source: any) => {
+                if (source.title && source.link) {
+                  categoryEvidence.sources.push({
+                    title: source.title,
+                    link: source.link,
+                    snippet: source.snippet || 'No snippet available'
+                  });
+                }
+              });
+            }
+          });
+        }
+
+        if (categoryEvidence.sources.length > 0) {
+          evidence.push(categoryEvidence);
+        }
+      }
+    });
+
+    return evidence;
+  };
+
+  const evidenceLocker = getEvidenceLocker();
 
   // Generate search keywords from company data
   const getSearchKeywords = (): string[] => {
@@ -222,42 +235,6 @@ const InvestigationReport: React.FC = () => {
 
   const searchKeywords = getSearchKeywords();
 
-  // Generate evidence items from API data
-  const getEvidenceItems = (): string[] => {
-    if (!investigationData && !companyData) return [];
-    
-    const evidence: string[] = [];
-    
-    if (companyData) {
-      evidence.push('KVK Registration Certificate - Verified');
-      evidence.push(`Company Structure (${companyData.legalForm}) - Confirmed`);
-      evidence.push(`Industry Classification (${companyData.sbiCode}) - Verified`);
-    }
-    
-    if (investigationData?.public_web_data?.company_url) {
-      evidence.push('Company Website Analysis - Completed');
-    }
-    
-    if (investigationData?.ubo_data?.length > 0) {
-      evidence.push(`Director/UBO Checks (${investigationData.ubo_data.length} individuals) - Clear`);
-    }
-    
-    if (investigationData?.risk_assessment?.adverse_media_risk) {
-      evidence.push('Media Coverage Analysis - Reviewed');
-    }
-    
-    if (investigationData?.risk_assessment?.sanctions_risk) {
-      evidence.push('Sanctions Database Searches - Completed');
-    }
-    
-    if (investigationData?.risk_assessment?.pep_risk) {
-      evidence.push('PEP Database Checks - Verified');
-    }
-    
-    return evidence;
-  };
-
-  const evidenceItems = getEvidenceItems();
 
   return (
     <div className="App">
@@ -359,28 +336,17 @@ const InvestigationReport: React.FC = () => {
               <div className="score-display">
                 <div className="score-circle">
                   <span className="score-number">{overallScore}</span>
-                  <span className="score-max">/4</span>
+                  <span className="score-max">/10</span>
                 </div>
                 <div className="score-label">
-                  <span className="risk-level low">LOW RISK</span>
+                  <span className={`risk-level ${overallScore <= 3 ? 'low' : overallScore <= 7 ? 'medium' : 'high'}`}>
+                    {overallScore <= 3 ? 'LOW RISK' : overallScore <= 7 ? 'MEDIUM RISK' : 'HIGH RISK'}
+                  </span>
                 </div>
               </div>
               <div className="conclusion-text">
                 <p>{conclusion}</p>
               </div>
-            </div>
-          </div>
-
-          {/* Evidence Locker Section */}
-          <div className="report-section">
-            <h3>Evidence Locker</h3>
-            <div className="evidence-grid">
-              {evidenceItems.map((item, index) => (
-                <div key={index} className="evidence-item">
-                  <div className="evidence-icon">📄</div>
-                  <span>{item}</span>
-                </div>
-              ))}
             </div>
           </div>
 
@@ -397,14 +363,50 @@ const InvestigationReport: React.FC = () => {
                   <div className="score-bar">
                     <div 
                       className="score-fill"
-                      style={{ width: `${(item.score / 4) * 100}%` }}
+                      style={{ width: `${(item.score / 10) * 100}%` }}
                     ></div>
                   </div>
-                  <span className="score-value">{item.score}/4</span>
+                  <span className="score-value">{item.score}/10</span>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Evidence Locker */}
+          {evidenceLocker.length > 0 && (
+            <div className="report-section">
+              <h3>Evidence Locker</h3>
+              <div className="evidence-categories">
+                {evidenceLocker.map((category, categoryIndex) => (
+                  <div key={categoryIndex} className="evidence-category">
+                    <h4>{category.category}</h4>
+                    <div className="evidence-sources">
+                      {category.sources.map((source, sourceIndex) => (
+                        <div key={sourceIndex} className="evidence-item">
+                          <div className="evidence-header">
+                            <a 
+                              href={source.link} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="evidence-link"
+                            >
+                              {source.title}
+                            </a>
+                          </div>
+                          <div className="evidence-snippet">
+                            {source.snippet}
+                          </div>
+                          <div className="evidence-url">
+                            <small>{source.link}</small>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
               {/* Action Buttons */}
               <div className="report-actions">

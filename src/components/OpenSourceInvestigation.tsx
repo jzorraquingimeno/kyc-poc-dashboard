@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
@@ -19,12 +19,12 @@ const OpenSourceInvestigation: React.FC = () => {
   const [currentSubActivity, setCurrentSubActivity] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+  const [isProcessingResults, setIsProcessingResults] = useState(false);
   const [apiStatus, setApiStatus] = useState<'online' | 'offline'>('offline');
-  const [investigationData, setInvestigationData] = useState<any>(null);
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const steps: Step[] = [
+  const steps: Step[] = useMemo(() => [
     {
       id: 1,
       title: 'Open-source Investigation',
@@ -73,7 +73,7 @@ const OpenSourceInvestigation: React.FC = () => {
         'Report Visualization'
       ]
     }
-  ];
+  ], []);
 
   // Load company data from API
   useEffect(() => {
@@ -114,12 +114,16 @@ const OpenSourceInvestigation: React.FC = () => {
     loadCompanyData();
   }, [kvkNumber]);
 
-  // Handle investigation progress
+  // Handle investigation progress with minimum 10-second animation
   useEffect(() => {
     if (!companyInfo || loading) return;
-    const totalDuration = 15000; // 15 seconds
+    
+    const minimumAnimationTime = 10000; // 10 seconds minimum
     const totalSubActivities = steps.reduce((acc, step) => acc + step.subActivities.length, 0);
-    const intervalDuration = totalDuration / totalSubActivities;
+    const intervalDuration = minimumAnimationTime / totalSubActivities;
+
+    let animationStartTime = Date.now();
+    let apiCallInitiated = false;
 
     const interval = setInterval(() => {
       setCurrentSubActivity(prev => {
@@ -140,48 +144,68 @@ const OpenSourceInvestigation: React.FC = () => {
         setCurrentStep(currentStepIndex);
         setProgress((nextSubActivity / totalSubActivities) * 100);
         
+        // Check if we've completed animation and minimum time has passed
         if (nextSubActivity >= totalSubActivities) {
           setIsComplete(true);
           clearInterval(interval);
           
-          // Call API to process KYC and then navigate to report
-          const processInvestigation = async () => {
-            try {
-              // Check API health
-              const health = await apiService.healthCheck();
-              setApiStatus(health.status === 'healthy' ? 'online' : 'offline');
-
-              // Process KYC investigation
-              const companyName = companyInfo?.legalName || 'Unknown Company';
-              const investigationResult = await apiService.processKYC({
-                company_name: companyName,
-                home_url: `https://example.com/${companyName.toLowerCase().replace(/\s+/g, '-')}`,
-                about_url: `https://example.com/${companyName.toLowerCase().replace(/\s+/g, '-')}/about`
-              });
-
-              setInvestigationData(investigationResult);
-              
-              // Navigate to report after processing
-              setTimeout(() => {
-                navigate(`/investigation-report/${kvkNumber}`);
-              }, 1000);
-            } catch (error) {
-              console.error('Failed to process KYC investigation:', error);
-              setApiStatus('offline');
-              
-              // Still navigate to report even if API fails (will use mock data)
-              setTimeout(() => {
-                navigate(`/investigation-report/${kvkNumber}`);
-              }, 1000);
-            }
-          };
-
-          processInvestigation();
+          const elapsedTime = Date.now() - animationStartTime;
+          
+          // Start API call if minimum time has passed
+          if (elapsedTime >= minimumAnimationTime && !apiCallInitiated) {
+            apiCallInitiated = true;
+            processInvestigation();
+          } else if (!apiCallInitiated) {
+            // Wait for remaining time before starting API call
+            const remainingTime = minimumAnimationTime - elapsedTime;
+            setTimeout(() => {
+              if (!apiCallInitiated) {
+                apiCallInitiated = true;
+                processInvestigation();
+              }
+            }, remainingTime);
+          }
         }
         
         return nextSubActivity;
       });
     }, intervalDuration);
+
+    // Function to handle API processing
+    const processInvestigation = async () => {
+      setIsProcessingResults(true);
+      
+      try {
+        // Check API health
+        const health = await apiService.healthCheck();
+        setApiStatus(health.status === 'healthy' ? 'online' : 'offline');
+
+        // Process KYC investigation
+        const companyName = companyInfo?.legalName || 'Unknown Company';
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const investigationResult = await apiService.processKYC({
+          company_name: companyName,
+          home_url: `https://example.com/${companyName.toLowerCase().replace(/\s+/g, '-')}`,
+          about_url: `https://example.com/${companyName.toLowerCase().replace(/\s+/g, '-')}/about`
+        });
+
+        // Store investigation result for report page
+        // The result will be retrieved again in the InvestigationReport component
+        
+        // Navigate to report after processing
+        setTimeout(() => {
+          navigate(`/investigation-report/${kvkNumber}`);
+        }, 1000);
+      } catch (error) {
+        console.error('Failed to process KYC investigation:', error);
+        setApiStatus('offline');
+        
+        // Still navigate to report even if API fails (will use mock data)
+        setTimeout(() => {
+          navigate(`/investigation-report/${kvkNumber}`);
+        }, 1000);
+      }
+    };
 
     return () => clearInterval(interval);
   }, [kvkNumber, navigate, steps, companyInfo, loading]);
@@ -305,10 +329,19 @@ const OpenSourceInvestigation: React.FC = () => {
           </div>
 
           {/* Completion Message */}
-          {isComplete && (
+          {isComplete && !isProcessingResults && (
             <div className="completion-message">
               <h2>Investigation Complete!</h2>
-              <p>Generating comprehensive report...</p>
+              <p>Preparing to process results...</p>
+            </div>
+          )}
+          
+          {/* Processing Results Message */}
+          {isProcessingResults && (
+            <div className="completion-message">
+              <h2>Processing Investigation Results</h2>
+              <p>Generating comprehensive report from API data...</p>
+              <div className="loading-spinner"></div>
             </div>
           )}
         </main>

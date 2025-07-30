@@ -277,30 +277,87 @@
   margin: 0;
 }
 
-/* Evidence Section */
-.evidence-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+/* Evidence Locker Section */
+.evidence-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.evidence-category {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--abn-amro-green);
+}
+
+.evidence-category h4 {
+  color: var(--abn-amro-secondary);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--abn-amro-light-gray);
+}
+
+.evidence-sources {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
 }
 
 .evidence-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: #f8f9fa;
+  background: white;
   border-radius: 8px;
-  border-left: 3px solid #66C7C0;
+  padding: 1rem;
+  border: 1px solid var(--abn-amro-light-gray);
+  transition: all 0.3s ease;
 }
 
-.evidence-icon {
-  font-size: 1.5rem;
+.evidence-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
 }
 
-.evidence-item span {
-  color: var(--abn-amro-secondary);
-  font-weight: 500;
+.evidence-header {
+  margin-bottom: 0.75rem;
+}
+
+.evidence-link {
+  color: var(--abn-amro-green);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.4;
+  display: block;
+}
+
+.evidence-link:hover {
+  color: var(--abn-amro-dark-green);
+  text-decoration: underline;
+}
+
+.evidence-snippet {
+  color: var(--abn-amro-dark-gray);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  background: #f9f9f9;
+  border-radius: 6px;
+  border-left: 3px solid var(--abn-amro-yellow);
+  font-style: italic;
+}
+
+.evidence-url {
+  margin-top: 0.5rem;
+}
+
+.evidence-url small {
+  color: var(--abn-amro-dark-gray);
+  font-size: 0.8rem;
+  word-break: break-all;
+  opacity: 0.7;
 }
 
 /* Risk Score Breakdown */
