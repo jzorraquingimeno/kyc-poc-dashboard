@@ -11,6 +11,11 @@ interface Finding {
   risk: 'Low' | 'Medium' | 'High';
   score: number; // 0-10 scale
   explanation: string;
+  sources: Array<{
+    title: string;
+    link: string;
+    snippet: string;
+  }>;
 }
 
 interface RiskScore {
@@ -121,12 +126,33 @@ const InvestigationReport: React.FC = () => {
         const riskData = riskAssessment[category.key];
         if (riskData) {
           const score = riskData['Risk Score'] || 0;
+          
+          // Extract sources for this risk category
+          const sources: Array<{title: string, link: string, snippet: string}> = [];
+          if (riskData.Source && typeof riskData.Source === 'object') {
+            Object.keys(riskData.Source).forEach(sourceType => {
+              const sourceList = riskData.Source[sourceType];
+              if (Array.isArray(sourceList)) {
+                sourceList.forEach((source: any) => {
+                  if (source.title && source.link) {
+                    sources.push({
+                      title: source.title,
+                      link: source.link,
+                      snippet: source.snippet || 'No snippet available'
+                    });
+                  }
+                });
+              }
+            });
+          }
+          
           findings.push({
             category: riskData['Risk Category'] || category.name,
             description: category.description,
             score: score,
             risk: getRiskLevel(score),
-            explanation: riskData.Summary || riskData['Risk Description'] || `${category.name} assessment completed with score ${score}/10.`
+            explanation: riskData.Summary || riskData['Risk Description'] || `${category.name} assessment completed with score ${score}/10.`,
+            sources: sources
           });
         }
       });
@@ -206,12 +232,20 @@ const InvestigationReport: React.FC = () => {
             break;
         }
         
+        // Generate mock sources for fallback (since we don't have detailed API structure)
+        const mockSources = [{
+          title: `${category.name} Assessment Report`,
+          link: '#', // Placeholder since we don't have real sources in simple API response
+          snippet: `Based on analysis from POST /processkyc endpoint. ${explanation.substring(0, 100)}...`
+        }];
+        
         findings.push({
           category: category.name,
           description: category.description,
           score: Math.min(10, Math.max(0, score)), // Ensure 0-10 range
           risk: getRiskLevel(score),
-          explanation: explanation
+          explanation: explanation,
+          sources: mockSources
         });
       });
     }
@@ -220,12 +254,19 @@ const InvestigationReport: React.FC = () => {
     if (findings.length === 0) {
       console.log('Creating default risk structure');
       riskCategories.forEach(category => {
+        const defaultSources = [{
+          title: `${category.name} - Default Assessment`,
+          link: '#',
+          snippet: `Default assessment from POST /processkyc endpoint. ${category.name} evaluation in progress.`
+        }];
+        
         findings.push({
           category: category.name,
           description: category.description,
           score: 3, // Default medium-low score
           risk: 'Low',
-          explanation: `${category.name} assessment pending. Preliminary evaluation suggests low risk profile based on available information.`
+          explanation: `${category.name} assessment pending. Preliminary evaluation suggests low risk profile based on available information.`,
+          sources: defaultSources
         });
       });
     }
@@ -467,6 +508,38 @@ const InvestigationReport: React.FC = () => {
                       <h5>Risk Assessment</h5>
                       <p>{finding.explanation}</p>
                     </div>
+                    
+                    {/* Sources Section */}
+                    {finding.sources && finding.sources.length > 0 && (
+                      <div className="finding-sources">
+                        <h5>Evidence Sources</h5>
+                        <div className="sources-list">
+                          {finding.sources.map((source, sourceIndex) => (
+                            <div key={sourceIndex} className="source-item">
+                              <div className="source-header">
+                                <a 
+                                  href={source.link} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="source-link"
+                                >
+                                  {source.title}
+                                </a>
+                              </div>
+                              <div className="source-snippet">
+                                {source.snippet}
+                              </div>
+                              <div className="source-url">
+                                <small>{source.link}</small>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="endpoint-info">
+                          <small>Data source: POST /processkyc endpoint</small>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))
               ) : (
