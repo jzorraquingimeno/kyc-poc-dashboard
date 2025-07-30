@@ -460,9 +460,6 @@ const InvestigationReport: React.FC = () => {
                       <h4>{finding.category}</h4>
                       <div className="risk-score-display">
                         <span className="risk-score">{finding.score}/10</span>
-                        <span className={`risk-badge ${finding.risk.toLowerCase()}`}>
-                          {finding.risk}
-                        </span>
                       </div>
                     </div>
                     <p className="finding-description">{finding.description}</p>
