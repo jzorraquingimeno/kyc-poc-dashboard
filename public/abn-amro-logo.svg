@@ -1,8 +1,0 @@
-<svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
-  <!-- ABN AMRO Logo Placeholder -->
-  <rect width="120" height="40" fill="rgb(0, 76, 76)" rx="4"/>
-  <text x="60" y="15" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#FFED00" text-anchor="middle">ABN</text>
-  <text x="60" y="28" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#FFED00" text-anchor="middle">AMRO</text>
-  <circle cx="15" cy="20" r="6" fill="#FFED00"/>
-  <circle cx="105" cy="20" r="6" fill="#55A51C"/>
-</svg>

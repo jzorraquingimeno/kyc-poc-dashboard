@@ -45,6 +45,31 @@
   border-left: 4px solid var(--abn-amro-green);
 }
 
+.company-title-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.company-title-section .api-status-indicator {
+  padding: 0.375rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.company-title-section .api-status-indicator.online {
+  background: var(--abn-amro-green);
+  color: white;
+}
+
+.company-title-section .api-status-indicator.offline {
+  background: var(--abn-amro-yellow);
+  color: var(--abn-amro-secondary);
+}
+
 .company-header h1 {
   color: var(--abn-amro-secondary);
   font-size: 2rem;

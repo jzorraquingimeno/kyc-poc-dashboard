@@ -96,6 +96,9 @@
   background: linear-gradient(135deg, var(--abn-amro-secondary) 0%, rgba(0, 76, 76, 0.8) 100%);
   padding: 1.5rem 2rem;
   border-bottom: 3px solid var(--abn-amro-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .tickets-header h3 {
@@ -104,6 +107,54 @@
   font-weight: 700;
   margin: 0;
   letter-spacing: -0.5px;
+}
+
+.api-status-indicator {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.api-status-indicator.online {
+  background: var(--abn-amro-green);
+  color: white;
+}
+
+.api-status-indicator.offline {
+  background: var(--abn-amro-yellow);
+  color: var(--abn-amro-secondary);
+}
+
+.loading-tickets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem;
+  gap: 1rem;
+}
+
+.loading-tickets .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--abn-amro-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-tickets p {
+  color: var(--abn-amro-secondary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .tickets-list {
