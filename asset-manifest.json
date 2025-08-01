@@ -1,15 +1,21 @@
 {
   "files": {
-    "main.css": "/kyc-poc-dashboard/static/css/main.b0f72f96.css",
-    "main.js": "/kyc-poc-dashboard/static/js/main.1bfc3a40.js",
+    "main.css": "/kyc-poc-dashboard/static/css/main.c1c95fbd.css",
+    "main.js": "/kyc-poc-dashboard/static/js/main.a955ba8b.js",
+    "static/js/239.a4aef774.chunk.js": "/kyc-poc-dashboard/static/js/239.a4aef774.chunk.js",
+    "static/js/977.673a0ef3.chunk.js": "/kyc-poc-dashboard/static/js/977.673a0ef3.chunk.js",
+    "static/js/732.ed59a4f7.chunk.js": "/kyc-poc-dashboard/static/js/732.ed59a4f7.chunk.js",
     "static/js/453.9c420bf0.chunk.js": "/kyc-poc-dashboard/static/js/453.9c420bf0.chunk.js",
     "index.html": "/kyc-poc-dashboard/index.html",
-    "main.b0f72f96.css.map": "/kyc-poc-dashboard/static/css/main.b0f72f96.css.map",
-    "main.1bfc3a40.js.map": "/kyc-poc-dashboard/static/js/main.1bfc3a40.js.map",
+    "main.c1c95fbd.css.map": "/kyc-poc-dashboard/static/css/main.c1c95fbd.css.map",
+    "main.a955ba8b.js.map": "/kyc-poc-dashboard/static/js/main.a955ba8b.js.map",
+    "239.a4aef774.chunk.js.map": "/kyc-poc-dashboard/static/js/239.a4aef774.chunk.js.map",
+    "977.673a0ef3.chunk.js.map": "/kyc-poc-dashboard/static/js/977.673a0ef3.chunk.js.map",
+    "732.ed59a4f7.chunk.js.map": "/kyc-poc-dashboard/static/js/732.ed59a4f7.chunk.js.map",
     "453.9c420bf0.chunk.js.map": "/kyc-poc-dashboard/static/js/453.9c420bf0.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b0f72f96.css",
-    "static/js/main.1bfc3a40.js"
+    "static/css/main.c1c95fbd.css",
+    "static/js/main.a955ba8b.js"
   ]
 }
